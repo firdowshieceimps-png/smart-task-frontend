@@ -4,6 +4,8 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import TaskCard from '../components/TaskCard';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const { token } = useContext(AuthContext);
@@ -11,7 +13,7 @@ const Dashboard = () => {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/tasks', {
+      const res = await axios.get('${API_BASE_URL}/api/tasks', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTasks(res.data.data);
@@ -27,7 +29,7 @@ const Dashboard = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to drop this task?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/tasks/${id}`, {
+        await axios.delete(`${API_BASE_URL}/api/tasks/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         fetchTasks();
